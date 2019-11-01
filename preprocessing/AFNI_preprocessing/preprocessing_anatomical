@@ -1,0 +1,120 @@
+ 
+PREPROCCESSING ANATOMICAL DATA	
+
+   Module load matlab
+
+   matlab 
+
+
+####### Matlab R2agui to convert raw data from scanner to NiFTI ###############
+
+    Open PAR 
+
+    Batch on/ 4D 
+
+# This will result in two folders of INV1 and INV2. Copy *t000.nii (magnitude) and the *t003.nii (phase) files from each folder and put them in a new-created folder named 'mp2rage'. 
+
+     mkdir mp2rage
+
+
+# In 'mr2rage', rename the magnitude file as “MP2RAGE_INV1(or 2).nii” and the phase file as “MP2RAGE_INV1 (or 2)ph.nii” for INV1 and INV2, accordingly. --> into new folder anat.mp2 (creates converted data). 
+# Navigate to 'mp2rage' and run the command 'mp2rageB (“name, threshold, movie”)' in Matlab. e.g., mp2rageB ('MP2RAGE', 90, 0). 
+    Creates MP2RAGE.nii (inv1 000, 003, INV2 000 003 combined) 
+
+# Notes: check whether the mp2rageB toolbox set in the MATlab path in advance. (data/projects/myelin/mp2rage) 
+
+# ? SF/code -- git clone – past from git – copy path of code – matlab – add path – genpath copy (add script) --(edit mp2rageB to view the code) 
+
+    Module load afni 
+
+    afni
+    
+    
+###################PTOA##########################
+
+ptoa -nii *.PAR (?)
+
+orientation changes with using ptoa;
+check one orientation as master; write down r-l a-p i-s orientation
+
+3drefit orient AIL MP2RAGE.nii 
+3drefit -dxorigin .. -dyorigin .. -dzorigin .. 'filename' 
+
+
+dlsub134_1_mp2rage_07_27_1_modulus_cphase00.nii = MP2RAGE_INV1.nii
+dlsub134_1_mp2rage_07_27_1_phase_cphase00.nii = MP2RAGE_INV1ph.nii
+
+dlsub134_1_mp2rage_07_27_1_modulus_cphase01.nii = MP2RAGE_INV2.nii
+dlsub134_1_mp2rage_07_27_1_phase_cphase01.nii = MP2RAGE_INV2ph.nii
+
+    
+####### SKULL STRIP #########
+
+    Module load afni
+
+# Copy the ‘startAfniToolbox’ and 'skullStrip01.sh' to the folder of MP2RAGE.nii  
+
+# Terminal --> go to file directory (I.e. ~/Documents/SF/data/anatomy/dlsub127/..  
+
+  ‘skullStrip01.sh mp2rage.nii mp2rage_INV2.nii 0.7 0’. 
+  
+# This command performs the skull stripping using proton density and stores the skull stripped data. 
+# Output: MPRAGE_ss.nii (kwrite file on computer)  
+
+
+
+
+###### no acpc alignment #####
+
+###### SEGMENTATION ######
+
+# run CBS tools on server;
+module load cbstools
+cbstools 
+
+# With the GUI open, select Plugins | JIST | JISTLayoutToo l from the scroll down menu. Open 'brain-segmentation-08.LayoutXML'(make sure you have the correct file and get basic understanding of the layout). 
+
+# CBS tools – jist layout tool – open – data1, analysis_afni, layout_comments 08 
+# T1 anatomy = MP2RAGE_ss.nii/// ACPC; MP2RAGE_ss_acpc.nii.gz 
+
+# Toads8 ; atlas in data1/projects/myelin/cruise-atlas-10obj-toads2008.txt 
+# Outputs: click 'copy seg/copy anatomy ...' on the right layout and select output directories and save filenames accordingly (e.g. MPRAGE_ss_seg.nii/MPRAGE_ss_N3.nii). 
+# Select a directory to store the output files: Projects|Layout preference. 
+# Project | layout preferences | check output folder 
+# Launch the project: Project | Progress Manager | Scheduler | Start Schedule. 
+# When the analysis finished, we will get an inhomogeneity-corrected anatomy using N3 normalized (MPRAGE_ss_N3.nii) and a left-and-right segmented file (MPRAGE_ss_seg.nii). 
+# Separate hemispheres: navigate to the directory containing 'hemisphereSeparation.sh' and 'startAfniToolbox.sh' (set directory to where startAfniToolbox is --> type ‘ . StartAfniToolbox’) --> 
+then go to folder of MPRAGE_ss_anat.nii.gz and MPRAGE_ss_segmentation.nii.gz. 
+Type ‘hemisphereSeparation.sh MPRAGE_ss_N3.nii.gz MPRAGE_ss_seg.nii.gz /packages/afni/17.0.13/TT_icbm452+tlrc 1' as well. 
+# Labeling: type 
+'3dcalc -a MPRAGE_ss_seg.nii.gz -b rightSeg.nii.gz -c leftSeg.nii.gz -expr 'and(within(a,2,2),within(b,2,2))*4 + and(within(a,2,2),within(c,2,2))*3 + within(a,0,0)*1 + within(a,1,1)*0' -prefix T1_seg_filled.nii.gz' in terminal (right = 4; left = 3; grey matter = 0; csf = 1). 
+
+    Output: T1_seg_filled.nii.gz 
+    
+    
+    
+    
+    
+    
+    
+########### SLICER #############
+
+https://www.slicer.org/w/index.php?4tle=Documenta4on/4.5 
+
+# In the terminal, load the needed software (module load Slicer). 
+
+# Type 'Slicer' in the terminal and add your data (T1_seg_filled + MPRAGE_ss_anat) by selecting 'File | Add Data | Choose Files to Add. Tick 'Show Options' and tick 'LabelMap' for the segmentation file, then click 'OK'. 
+
+# Navigate to the 'Editor' module by rolling the drop-down list on the top left corner. (select module) 
+
+# In the middle window, click the small pin at the left end of the sliding bar and expend the << menu below the pin. Toggle the label map visibility by selecting the first colourful checkerboard (??). 
+
+# Use the edit tools on the left colum (e.g. EraseLabel, PaintEffect, etc.) to modify your data. Usually, use 'PaintEffect' with 'Pixel Mode' to perform slight modifications. 
+
+#  Basic control: right click and hold the mouse to zoom in/out; roll the mouse ball to slide different slices; hold the mouse ball to drag; left click to perform modification. 
+
+ 
+
+After segmentation; construct 3d model to check  
+
+https://www.youtube.com/watch?time_continue=156&v=3bvaKY4fpns 

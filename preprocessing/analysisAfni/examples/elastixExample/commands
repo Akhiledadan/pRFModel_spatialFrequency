@@ -1,0 +1,58 @@
+3dTstat -mean -prefix amplitudeAnatomy.nii.gz pb00.motionCorrect.r01.tcat+orig
+
+3dcopy anatomy.nii.gz MPRAGE+orig
+3dcopy amplitudeAnatomy.nii.gz EPI+orig
+3drefit -orient LAI MPRAGE+orig
+
+3dZeropad -z 10 -prefix MPRAGE_zp+orig MPRAGE+orig
+3dZeropad -z 10 -prefix EPI_zp+orig EPI+orig
+
+@Align_Centers -base EPI_zp+orig -cm -dset MPRAGE_zp+orig
+
+@clip_volume -below -60 -above 35 -left 40 -right -45 -anterior 90 -input EPI_zp+orig -verb -prefix EPI_zp_clip.nii
+
+3dAFNItoNIFTI MPRAGE_zp_shft+orig
+
+3dUnifize -input MPRAGE_zp_shft+orig -prefix MPRAGE_zp_shft_unif.nii
+
+3dAutomask -clfrac 0.4 -dilate 5 -prefix MPRAGE_zp_shft_unif_auto.nii MPRAGE_zp_shft_unif.nii
+
+3dAutomask -clfrac 0.6 -dilate 5 -prefix EPI_zp_clip_auto.nii EPI_zp_clip.nii
+ 
+3dcalc -a EPI_zp_clip.nii -b EPI_zp_clip_auto.nii -expr 'a*step(b)' -prefix EPI_zp_clip_mask.nii
+
+align_epi_anat.py -volreg_method 3dAllineate -anat MPRAGE_zp_shft_unif.nii -epi EPI_zp_clip_mask.nii -epi_base 0 -anat_has_skull no -epi_strip None -big_move -volreg_opts -final wsinc5 -cost lpc 
+
+3dresample -inset MPRAGE_zp_shft_unif_al+orig -master EPI_zp_clip_mask.nii -prefix MPRAGE_zp_shft_unif_al_epi_grid+orig
+
+3dQwarp -source MPRAGE_zp_shft_unif_al_epi_grid+orig -base EPI_zp_clip_mask.nii -blur 0 0 -iwarp
+
+
+3dNwarpApply -nwarp 'MPRAGE_zp_shft.1D MPRAGE_zp_shft_unif_al_mat.aff12.1D' -source MPRAGE_zp+orig -master MPRAGE_zp+orig -prefix MPRAGE_al.nii 
+
+
+
+mkdir exampleoutput
+elastix -f EPI_zp_clip.nii -m MPRAGE_zp_shft_unif.nii -out exampleoutput -p parameters_Affine.txt -p parameters_BSpline.txt
+cp EPI_zp_clip.nii exampleoutput/
+
+%check UMC code to evaluate the optimizer etc etc... 
+
+mkdir exampleoutput
+elastix -f EPI_zp_clip.nii -m MPRAGE_zp_shft_unif.nii -fMask EPI_zp_clip_auto.nii -mMask MPRAGE_zp_shft_unif_auto.nii -out exampleoutput -p parameters-similarity.txt -p parameters-affine.txt -p parameters-bspline.txt
+cp EPI_zp_clip.nii exampleoutput/
+
+
+
+#3dUnifize -input EPI_zp_clip+orig -T2 -prefix EPI_zp_clip_unif+orig 
+
+#3dAutomask -apply_prefix EPI_ss+orig EPI+orig
+
+#3dSkullStrip -input EPI_zp_clip+orig -prefix EPI_zp_clip_ss+orig
+
+
+
+align_epi_anat.py -anat MPRAGE_zp_shft+orig -epi EPI_zp_clip+orig -epi_base 0 -anat_has_skull no -epi_strip None -big_move -volreg_opts -final wsinc5 -cost lpc
+
+
+

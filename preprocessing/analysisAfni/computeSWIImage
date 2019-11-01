@@ -1,0 +1,16 @@
+#!/bin/tcsh
+
+cd anatomy/
+inplaneEpi='amplitudeAnatomy_scaled.nii'
+inplanePhase='phaseAnatomy_scaled.nii'
+
+rm *.BRIK
+rm *.HEAD
+rm meanEpi.nii
+
+3dcalc -a $inplaneEpi -b $inplanePhase -expr '( a*0.40 + b*0.60)' -prefix meanEpi+orig
+3dAFNItoNIFTI meanEpi+orig
+rm *.BRIK
+rm *.HEAD
+
+cd ..

@@ -1,0 +1,6 @@
+tkregister --mov inplane.nii --targ T1.mgz --reg register2t1.dat
+mri_convert --in_type mgz --out_type nii T1.mgz T1.nii
+mri_vol2vol --mov inplane.nii --targ T1.mgz --reg register2t1.dat --o inplane_reg.nii --trilin
+
+mri_vol2vol --mov inplane.nii --targ T1.mgz --reg register2t1.dat --o inplane_reg_no_resample.nii --no-resample
+3dWarp -deoblique -prefix inplane_reg_no_resample_deob.nii inplane_reg_no_resample.nii

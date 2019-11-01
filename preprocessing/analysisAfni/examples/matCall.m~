@@ -1,0 +1,6 @@
+function matCall(myN,myTitle)
+
+sprintf('%s',myN)
+addpath(genpath(myN))
+
+exit

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+PATH=$PATH:/home/alessiofracasso/Dropbox/analysisAfni
+PATH=$PATH:/home/alessiofracasso/Dropbox/analysisAfni/surfaces
+PATH=$PATH:/home/alessiofracasso/Dropbox/analysisAfni/coregistration
+export AFNI_TOOLBOXDIR=/home/alessiofracasso/Dropbox/analysisAfni
+export AFNI_TOOLBOXDIRSURFACES=/home/alessiofracasso/Dropbox/analysisAfni/surfaces
+export AFNI_TOOLBOXDIRCOREGISTRATION=home/alessiofracasso/Dropbox/analysisAfni/coregistration
+export AFNI_MATLAB=/home/alessiofracasso/programs/afni_matlab/matlab
+
+export PATH=$PATH:/home/alessiofracasso/programs/elastix_linux64_v4.8/bin
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/alessiofracasso/programs/elastix_linux64_v4.8/bin/lib
+export LD_LIBRARY_PATH=/home/alessiofracasso/programs/elastix_linux64_v4.8/lib:$LD_LIBRARY_PATH
+
+

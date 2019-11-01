@@ -1,0 +1,9 @@
+afni_proc.py -subj_id motionCorrect \
+	-dsets EPI/*.BRIK \
+	-blocks despike volreg \
+	-volreg_opts_vr -twopass \
+	-volreg_opts_vr -cubic \
+	-volreg_opts_vr -maxite 38 \
+	-volreg_opts_vr -final heptic
+
+

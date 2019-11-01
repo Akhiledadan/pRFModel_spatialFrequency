@@ -1,0 +1,114 @@
+3dcopy anatomy.nii.gz anatomyCopy.nii.gz
+3dcopy anatomy_no_skull_stripped.nii.gz anatomy_no_skull_strippedCopy.nii.gz
+3dcopy segmentation.nii.gz segmentationCopy.nii.gz
+3dcopy boundaries.nii.gz boundariesCopy.nii.gz
+3dcopy depth.nii.gz depthCopy.nii.gz
+3dcopy curvature.nii.gz curvatureCopy.nii.gz
+3dcopy thickness.nii.gz thicknessCopy.nii.gz
+
+3drefit -orient LAI anatomyCopy.nii.gz
+3drefit -orient LAI anatomy_no_skull_strippedCopy.nii.gz
+3drefit -orient LAI segmentationCopy.nii.gz
+3drefit -orient LAI boundariesCopy.nii.gz
+3drefit -orient LAI depthCopy.nii.gz
+3drefit -orient LAI curvatureCopy.nii.gz
+3drefit -orient LAI thicknessCopy.nii.gz
+
+3dNwarpApply -source amplitudeAnatomy.nii -nwarp 'coregistration/combined_inv.1D coregistration/Qwarp_WARPINV+orig' -prefix amplitudeSingleShot+orig -master anatomyCopy.nii.gz -interp NN
+
+3dNwarpApply -source stats.motionCorrect+orig -nwarp 'coregistration/combined_inv.1D coregistration/Qwarp_WARPINV+orig' -prefix statsSingleShot+orig -master anatomyCopy.nii.gz -interp NN
+
+defineBoundaries.sh boundariesCopy.nii.gz 1 2 1
+
+generateSurfaces.sh 19 60 800 9
+
+afniSurface.sh anatomyCopy.nii.gz
+
+interpolateVolumeOnSurface.sh statsSingleShot+orig
+interpolateVolumeOnSurface.sh curvatureCopy.nii.gz
+interpolateVolumeOnSurface.sh thicknessCopy.nii.gz
+interpolateVolumeOnSurface.sh amplitudeSingleShot+orig
+interpolateVolumeOnSurface.sh anatomyCopy.nii.gz
+
+mappingBetweenSurfaces_ROI.sh rightV1.1D.roi 9
+mappingBetweenSurfaces_ROI.sh leftV1.1D.roi 9
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mkdir exampleoutputRigid04
+elastix -f amplitudeAnatomy_clip_process.nii.gz -m anatomy_process.nii.gz -fMask epi_mask.nii.gz -mMask anatomy_mask.nii.gz -out exampleoutputRigid04 -p parameters-rigid.txt -p parameters-similarity.txt -p parameters-affine.txt -p parameters-bspline.txt
+cp amplitudeAnatomy_clip_process.nii.gz exampleoutputRigid04/
+
+
+mkdir exampleTransRigid01
+transformix -in MPRAGE_zp_shft_unif.nii -out exampleTransRigid01/ -tp exampleoutputRigid01/TransformParameters.3.txt
+
+mkdir invertTransform01 
+elastix -f EPI_zp_clip.nii -m EPI_zp_clip.nii -t0 exampleoutputRigid01/TransformParameters_invert.2.txt -out invertTransform01 -p parameters-rigid.txt -p parameters-similarity.txt -p parameters-affine.txt
+cp EPI_zp_clip.nii invertTransform01/
+
+
+
+
+
+
+
+3dcalc -a EPI_zp_clip.nii -b EPI_zp_clip_auto.nii -expr 'a*step(b)' -prefix EPI_zp_clip_mask.nii
+
+align_epi_anat.py -anat MPRAGE_zp_shft_unif.nii -epi EPI_zp_clip_mask.nii -epi_base 0 -anat_has_skull no -epi_strip None -big_move -cost lpc
+
+3dresample -inset MPRAGE_zp_shft_unif_al+orig -master EPI_zp_clip_mask.nii -prefix MPRAGE_zp_shft_unif_al_resample.nii -rmode Linear
+
+3dUnifize -inset MPRAGE_zp_shft_unif_al_resample.nii -T2 -T2 -prefix MPRAGE_zp_shft_unif_al_resample_T2like+orig
+
+3dQwarp -base EPI_zp_clip_mask.nii -source MPRAGE_zp_shft_unif_al_resample_T2like+orig -blur 0 0 -iwarp -maxlev 0
+
+
+
+
+
+
+3dNwarpApply -nwarp 'MPRAGE_zp_shft.1D MPRAGE_zp_shft_unif_al_mat.aff12.1D' -source MPRAGE_zp+orig -master MPRAGE_zp+orig -prefix MPRAGE_al.nii 
+
+
+
+mkdir exampleoutput
+elastix -f EPI_zp_clip.nii -m MPRAGE_zp_shft_unif.nii -out exampleoutput -p parameters_Affine.txt -p parameters_BSpline.txt
+cp EPI_zp_clip.nii exampleoutput/
+
+%check UMC code to evaluate the optimizer etc etc... 
+
+mkdir exampleoutputRigid
+elastix -f EPI_zp_clip.nii -m MPRAGE_zp_shft_unif.nii -fMask EPI_zp_clip_auto.nii -mMask MPRAGE_zp_shft_unif_auto.nii -out exampleoutputRigid -p parameters-rigid.txt -p parameters-similarity.txt -p parameters-affine.txt -p parameters-bspline.txt
+cp EPI_zp_clip.nii exampleoutputRigid/
+
+
+
+#3dUnifize -input EPI_zp_clip+orig -T2 -prefix EPI_zp_clip_unif+orig 
+
+#3dAutomask -apply_prefix EPI_ss+orig EPI+orig
+
+#3dSkullStrip -input EPI_zp_clip+orig -prefix EPI_zp_clip_ss+orig
+
+
+
+align_epi_anat.py -anat MPRAGE_zp_shft+orig -epi EPI_zp_clip+orig -epi_base 0 -anat_has_skull no -epi_strip None -big_move -volreg_opts -final wsinc5 -cost lpc
+
+
+

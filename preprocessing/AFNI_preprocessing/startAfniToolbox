@@ -1,0 +1,13 @@
+#! /bin/bash
+
+export AFNI_TOOLBOXDIR=/data1/projects/dumoulinlab/Lab_members/Akhil/SF/code/pRF-comparison-Spatial-frequency/AFNI_preprocessing/analysisAfni_light
+
+PATH=$PATH:/data1/projects/dumoulinlab/Lab_members/Akhil/SF/code/pRF-comparison-Spatial-frequency/AFNI_preprocessing/analysisAfni_light
+PATH=$PATH:$AFNI_TOOLBOXDIR/surfaces
+PATH=$PATH:$AFNI_TOOLBOXDIR/coregistration
+PATH=$PATH:$AFNI_TOOLBOXDIR/motionCorrectAnatomies
+
+export AFNI_TOOLBOXDIRSURFACES=$AFNI_TOOLBOXDIR/surfaces
+export AFNI_TOOLBOXDIRCOREGISTRATION=$AFNI_TOOLBOXDIR/coregistration
+#export AFNI_TOOLBOXDIRMOTIONCORRECTANATOMY=$AFNI_TOOLBOXDIR/motionCorrectAnatomies
+export AFNI_ENVIRON_WARNINGS=NO

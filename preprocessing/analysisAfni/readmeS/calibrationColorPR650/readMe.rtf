@@ -1,0 +1,97 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww9000\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\b\fs24 \cf0 reading the spectra values from PR650 using a mac:
+\b0 \
+\
+- connect the PR650 to the computer with your serial adapter (install the\
+related serial adapter code on the mac, if necessary);\
+\
+- open CoolTerm program ({\field{\*\fldinst{HYPERLINK "http://freeware.the-meiers.org/"}}{\fldrslt http://freeware.the-meiers.org/}})\
+this program does not require any installation, you just need to \
+run the file\
+\
+- if the serial adapter is connected and your driver is working\
+then push the 'connect' button on the CoolTerm GUI;\
+\
+- at this point mac is connected to PR650;\
+\
+- take one measurement with the PR650, if the PR650 is set to print the\
+outcome of the measurement (default setting), then\
+you should see all the measured informations flowing\
+in the CoolTerm main window;\
+\
+- when the printing is done, then save the outcome on a file,\
+using the 'save' button on the CoolTerm GUI;\
+\
+\
+
+\b To compute the 'spectra.mat' file:\
+\
+
+\b0 -take one measurement for each rgb channel, using\
+the corresponding mid-gray level and save the outcome on \
+3 separated files, for example:\
+red1.txt, green1.txt and blue1.txt;\
+\
+-open matlab and prepare a cell array with the name of the files\
+according to rgb order:\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 filenames\{1\} = 'red1.txt';\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 filenames\{2\} = 'green1.txt';\
+filenames\{3\} = 'blue1.txt';\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 \
+then run the .m file:\
+\
+readPR650data(filenames,1)\
+\
+the first argument is filenames, the cell array with the names of the\
+files containing the PR650 output for the three channels;\
+\
+the second argument is the number of measurements (triplets) taken,\
+in this case we took just one triplet, so the number is 1.\
+\
+the function \
+\
+readPR650data(filenames,1)\
+\
+generates the file\
+\
+spectra.mat\
+\
+which is the spectra file to use in your calibration.\
+\
+if you want to take more than one measurement (more than one triplet)\
+then you need to collect (say), 2 spectra files for each channel,\
+then the filenames cell array will be as follows:\
+(the name order must be in the rgb order, always).\
+\
+filenames\{1\} = 'red1.txt';\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 filenames\{2\} = 'green1.txt';\
+filenames\{3\} = 'blue1.txt';\
+filenames\{4\} = 'red2.txt';\
+filenames\{5\} = 'green2.txt';\
+filenames\{6\} = 'blue2.txt';\
+\
+then you need to call the function\
+\
+readPR650data(filenames,2)\
+\
+note that the second argument is now 2, so two files are now\
+associated with each channel. \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 \
+\
+\
+\
+\
+\
+ }

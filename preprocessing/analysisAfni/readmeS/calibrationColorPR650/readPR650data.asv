@@ -1,0 +1,41 @@
+function readPR650data(filenames,nMeasurements)
+% arrange files in red-green-blue order
+
+intensity = zeros( 101, length(filenames) );
+
+for i = 1:length(filenames)
+    [lambda intensityTemp] = readPR650file(filenames{i});
+    intensity(:,i) = intensityTemp';
+end
+
+
+
+
+function [lambda intensity] = readPR650file(filename)
+
+fid = fopen(filename);
+
+tline = fgetl(fid);
+outLine = [];
+while ischar(tline)    
+    tline = fgetl(fid);
+    if strfind(tline,'Corrected Spectral Radiance')
+        while ischar(tline)
+            tline = fgetl(fid);
+            outLine = [ outLine, tline ];
+        end
+    end
+end
+
+fclose(fid);
+
+outLine = str2num(outLine);
+indexLambda = 1:2:length(outLine);
+indexIntensity = indexLambda + 1;
+lambda = outLine( indexLambda );
+intensity = outLine( indexIntensity );
+
+[lambda, indx] = sort(lambda);
+intensity = intensity(indx);
+
+

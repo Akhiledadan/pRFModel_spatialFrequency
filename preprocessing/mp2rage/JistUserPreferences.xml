@@ -1,0 +1,62 @@
+<edu.jhu.ece.iacl.jist.pipeline.JistPreferences>
+  <fileExtensionLayout>LayoutXML</fileExtensionLayout>
+  <defaultMemory>32000</defaultMemory>
+  <defaultWallTime>03:00:00</defaultWallTime>
+  <defaultMaxProcesses>2</defaultMaxProcesses>
+  <fileHistory>
+    <file>/home/akhil/Documents/Project/testfolder/anatomy/brain-segmentation-native_08.LayoutXML</file>
+    <file>/home/akhil/Documents/Project/testfolder/anatomy/brain-segmentation-native_09.LayoutXML</file>
+  </fileHistory>
+  <lastDirectory>/home/akhil/Documents/Project/testfolder</lastDirectory>
+  <lastLayoutDirectory>/home/akhil/Documents/Project/testfolder/anatomy</lastLayoutDirectory>
+  <maxHistorySize>10</maxHistorySize>
+  <jre>/home/akhil/Documents/mipav_inst/jre/bin/java</jre>
+  <preferredextension>nii</preferredextension>
+  <preferredCompression>gzip</preferredCompression>
+  <preferredViewers>
+    <entry>
+      <string>Surface Custom</string>
+      <string>Viewer Location</string>
+    </entry>
+    <entry>
+      <string>Surface Advanced</string>
+      <string>Viewer Location</string>
+    </entry>
+    <entry>
+      <string>Volume Preview</string>
+      <string>Viewer Location</string>
+    </entry>
+    <entry>
+      <string>Surface Preview</string>
+      <string>Viewer Location</string>
+    </entry>
+    <entry>
+      <string>Volume Advanced</string>
+      <string>Viewer Location</string>
+    </entry>
+    <entry>
+      <string>Volume Custom</string>
+      <string>Viewer Location</string>
+    </entry>
+  </preferredViewers>
+  <preferredViewerQuality>
+    <entry>
+      <string>Volume</string>
+      <int>0</int>
+    </entry>
+    <entry>
+      <string>Surface</string>
+      <int>0</int>
+    </entry>
+  </preferredViewerQuality>
+  <useGridEngine>false</useGridEngine>
+  <gridEngineEmail></gridEngineEmail>
+  <useHypervisor>false</useHypervisor>
+  <sendDataToHypervisor>false</sendDataToHypervisor>
+  <hypervisorIP>masi.vuse.vanderbilt.edu</hypervisorIP>
+  <gridEngineTemplateLoc>/home/akhil/jist_pbstemplate.txt</gridEngineTemplateLoc>
+  <hypervisorProbability>1.0</hypervisorProbability>
+  <timeFudge>4.0</timeFudge>
+  <memFudge>3.0</memFudge>
+  <debugLevel>1</debugLevel>
+</edu.jhu.ece.iacl.jist.pipeline.JistPreferences>

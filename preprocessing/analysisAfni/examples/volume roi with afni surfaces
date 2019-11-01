@@ -1,0 +1,11 @@
+ROINAME='LEFTV1.1D.roi'
+BOUNDARY='boundary05'
+ANAT='anatomy_crop.nii.gz'
+DEPTH='continous_depth.nii.gz'
+Rscript $AFNI_TOOLBOXDIR/surfaces/surf2VolRoi01.R \
+ $ROINAME \
+ $BOUNDARY \
+ $DEPTH \
+ $AFNI_INSTALLDIR \
+ $AFNI_TOOLBOXDIRSURFACES
+

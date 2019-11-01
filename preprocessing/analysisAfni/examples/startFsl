@@ -1,0 +1,6 @@
+#! /bin/sh
+
+export FSLDIR=/usr/share/fsl/5.0
+echo $FSLDIR
+source $FSLDIR/etc/fslconf/fsl.sh
+

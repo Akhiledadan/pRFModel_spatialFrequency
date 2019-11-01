@@ -1,0 +1,5 @@
+#!/bin/bash
+data=`date --date=-1day +%Y%m%d`
+fileshort=test_$data.csv
+
+Rscript testfile.R $fileshort --save

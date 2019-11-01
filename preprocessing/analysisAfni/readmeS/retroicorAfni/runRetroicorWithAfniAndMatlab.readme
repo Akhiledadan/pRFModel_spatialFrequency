@@ -1,0 +1,72 @@
+retroicor:
+
+STUFF NEEDED + PREPARATION
+code needed: generateRicorPredictor.m
+             retroicorPredictor.m
+             matlab toolbox provided with afni (file RetroTS.m and dependencies)
+
+in the participant folder:
+
+create directory ricordData/ 
+put the physio files from the scanner in the directory (files extension=*.log)
+
+create directory EPI/
+put the epi files in the directory
+
+¨optional¨
+create directory stimTiming/
+put the stimulus timing in the directory with the following specs:
+one file for each condition, on each file, one line for each experimental run,
+if the specific condition is not present in a single run, then write *
+for that line (run).
+
+
+GENERATE RETROICOR PREDICTORS:
+go to the directory ricorData/
+run the file generateRicorPredictor.m, this file will generate the files respData.dat and pulseData.data
+and pass them to RetroTS.m in an appropriate structure;
+The file RetroTs.m will generate a file oba%.slibase.1D for each run, this is the file 
+that afni uses to apply retroicor.
+
+
+IN CASE YOU WANT TO PERFORM HRF ESTIMATION OUTSIDE AFNI: 
+run the following to obtain despiked, retroicor corrected, timeshifted
+motioncorrected and scaled TSs.
+NB. remember to change the the regular expression for the EPIs (line 43), in case
+you are not using niftis. Also change the time-shift pattern, in case your pattern differs,
+look at the afni_proc.py for patterns codes. All the results are going to be stored
+in the directory singleRun.results
+
+#!/bin/tcsh
+
+afni_proc.py -subj_id singleRun \  
+	-dsets EPI/*.nii	\
+	-blocks despike ricor tshift volreg mask scale \
+        -ricor_regs ricorData/*.1D           \
+        -tshift_opts_ts -tpattern alt+z 
+
+
+IN CASE YOU WANT TO PERFORM HRF ESTIMATION with AFNI: 
+run the following to obtain despiked, retroicor corrected, timeshifted
+motioncorrected and scaled TSs.
+NB. remember to change the the regular expression for the EPIs (line 57), in case
+you are not using niftis. Also change the time-shift pattern, in case your pattern differs,
+look at the afni_proc.py for patterns codes. Also change the regular expression for the
+stimulus timing definition (in case), the regression stim labels and the regress_basis
+parameter (suggested = TENT). All the results are going to be stored
+in the directory singleRun.results
+
+afni_proc.py -subj_id singleRun \
+	-dsets EPI/*.nii	\
+	-blocks despike ricor tshift volreg mask scale regress	\
+        -ricor_regs ricorData/*.1D           \
+        -tshift_opts_ts -tpattern alt+z  	        \
+	-regress_stim_times stimTiming/*.1D	\
+	-regress_stim_labels SingleRun			\
+	-regress_basis ...
+
+
+cheers!
+
+Ale
+

@@ -1,0 +1,18 @@
+function roiMatlab(dirAfni)
+% show the the peaks
+% usage:
+%           showPeaks(N,Title,FileName)
+%           http://scriptdemo.blogspot.ca
+
+%if nargin~=3
+%   disp('Usage: ')
+%   disp(' showPeaks(N,Title,FileName) ')
+%   return
+%end
+dirAfni=str2num(dirAfni)
+sprintf('%s', dirAfni)
+%addpath(genpath(dirAfni))
+
+%BrikLoad
+%close
+

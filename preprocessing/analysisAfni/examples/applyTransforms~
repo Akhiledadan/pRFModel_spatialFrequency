@@ -1,0 +1,9 @@
+
+
+3dWarp -matvec_in2out MPRAGE_at.Xat.1D -gridset anatomyN3.nii.gz -prefix LR.nii /usr/share/afni/atlases/TT_caez_lr_18+tlrc
+
+cat_matvec -ONELINE MPRAGE_at.Xat.1D -I > MPRAGEtoTLRC.1D
+
+3dNwarpApply -source /usr/share/afni/atlases/TT_caez_lr_18+tlrc -nwarp 'MPRAGEtoTLRC.1D Qwarp_WARPINV+tlrc' -prefix LRWarp01.nii -master anatomyN3.nii.gz -interp NN
+
+convertRoi_from_desi_atlas.sh MPRAGE_at.Xat.1D anatomyN3.nii.gz /usr/share/afni/atlases/TT_caez_lr_18+tlrc 1 Qwarp_WARPINV+tlrc

@@ -1,0 +1,46 @@
+3dcopy anatomy.nii.gz anatomyCopy.nii.gz
+3drefit -orient LAI anatomyCopy.nii.gz
+
+3dcopy boundaries.nii.gz boundariesCopy.nii.gz
+3drefit -orient LAI boundariesCopy.nii.gz
+
+3dcopy curvature.nii.gz curvatureCopy.nii.gz
+3drefit -orient LAI curvatureCopy.nii.gz
+
+3dcopy depth.nii.gz depthCopy.nii.gz
+3drefit -orient LAI depthCopy.nii.gz
+
+3dcopy thickness.nii.gz thicknessCopy.nii.gz
+3drefit -orient LAI thicknessCopy.nii.gz
+
+3dNwarpApply -source amplitudeAnatomy.nii -nwarp 'coregistration/combined_inv.1D IDENT(amplitudeAnatomy.nii)' -prefix amplitudeSingleShot+orig -master anatomyCopy.nii.gz -interp NN
+
+3dNwarpApply -source stats.motionCorrect+orig -nwarp 'coregistration/combined_inv.1D IDENT(amplitudeAnatomy.nii)' -prefix statsSingleShot+orig -master anatomyCopy.nii.gz -interp NN
+
+
+3dNwarpApply -source amplitudeAnatomy.nii -nwarp 'coregistration/combined_inv.1D coregistration/Qwarp_WARPINV+orig' -prefix amplitudeSingleShot+orig -master anatomyCopy.nii.gz -interp NN
+
+3dNwarpApply -source stats.motionCorrect+orig -nwarp 'coregistration/combined_inv.1D coregistration/Qwarp_WARPINV+orig' -prefix statsSingleShot+orig -master anatomyCopy.nii.gz -interp NN
+
+
+defineBoundaries.sh boundariesCopy.nii.gz 1 2 1
+
+generateSurfaces.sh 19 60 800 9
+
+afniSurface.sh anatomyCopy.nii.gz
+
+interpolateVolumeOnSurface.sh statsSingleShot+orig
+interpolateVolumeOnSurface.sh curvatureCopy.nii.gz
+interpolateVolumeOnSurface.sh thicknessCopy.nii.gz
+interpolateVolumeOnSurface.sh amplitudeSingleShot+orig
+interpolateVolumeOnSurface.sh anatomyCopy.nii.gz
+
+mappingBetweenSurfaces_ROI.sh rightV1.1D.roi 9
+mappingBetweenSurfaces_ROI.sh leftV1.1D.roi 9
+
+
+
+
+
+
+

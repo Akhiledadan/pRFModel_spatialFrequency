@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+NIIFILEIN=$1
+MPRAGE=$3
+TMAT=$4
+
+Rscript $AFNI_TOOLBOXDIR/transformNiftyFromFreeview.R $NIIFILEIN $MPRAGE $TMAT
+
+
+

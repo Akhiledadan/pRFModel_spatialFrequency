@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+NSURFACES=2
+
+## generate all isosurfaces (unsmoothed)
+for ((i=0; i<=(($NSURFACES-1)); i++)); do
+	outputFileName=$(printf 'boundariesThr.nii.gz[%s]' $i)
+	if (( $i<1 )) 
+	then
+	    n=(( $i-1 ))
+		echo $n
+	#	instr1=$(printf 'IsoSurface -input %s -isoval 1 -o_vec boundary0%d_or' ${outputFileName} $i)
+	else
+		echo 'ale1'
+	#	instr1=$(printf 'IsoSurface -input %s -isoval 1 -o_vec boundary%d_or' ${outputFileName} $i)
+	fi
+	#echo ${outputFileName}
+	#echo ${instr1}
+    echo $i
+	#${instr1}
+
+done
