@@ -3,7 +3,6 @@ Comparison of spatial frequencies across spatial frequencies
 Matlab code to run the stimuli to acquire fMRI responses to pRF mapping stimuli with different spatial frequencies and do the analysis of fMRI data (pRF model based).
 
 
-
 Stimuli
 
 Download psychtoolbox and add it to your path (check the link for downloading- http://psychtoolbox.org/download.html)
