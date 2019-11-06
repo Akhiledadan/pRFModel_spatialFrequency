@@ -1,4 +1,4 @@
-function opt = getOpts(varargin)
+function opt = SF_getOpts(subjID,varargin)
 % Function to get struct with default analysis pipeline options 
 % example:
 %
@@ -7,20 +7,28 @@ function opt = getOpts(varargin)
 % Example 2:
 %   opt = getOpts('foo', true)
 
+opt.subjID = subjID;
 
 % --- GENERAL ---
-opt.skipMEGPreproc        = true;               % General
-opt.skipMRIPreproc        = true;               % General
 opt.verbose               = true;               % General
-opt.saveData              = false;               % General
-opt.saveFig               = false;               % General
-opt.fullSizeMesh          = false;              % General: if true, execute analysis with fullsize meshes and gain matrix (FS size), if false, downsample to Brainstorm mesh size
-opt.surfVisualize         = false;              % General: visualize surface meshes
-opt.subfolder             = 'original'; 
+opt.plotTimeSeries        = false;
+opt.detailedPlot          = false;
+opt.aucBsPlot             = false;
 
+opt.saveData              = true;               % General
+opt.saveFig               = true;               % General
+opt.saveFigTseries        = true;               % General
+opt.subfolder             = 'original'; 
+opt.visPRF                = false;
+
+opt.extractPrfParams      = true;
+opt.getTimeSeries         = false;
+opt.getPredictedResponse  = true;
+  
 % --- prf parameters ---
-opt.rois = [{'V1';'V2';}];
-opt.conditions = {'sf03';'sf06';'sf12';'sf12'};
+opt.rois = [{'V1';'V2';'V3'}]; 
+opt.conditions = {'sf03';'sf06';'sf12'};
+opt.modelType = '2DGaussian'; % DoGs for difference of gaussians 
 opt.plotType = 'Ecc_Sig';
 % Model thresholds
 opt.varExpThr = 0.2;
@@ -39,6 +47,12 @@ opt.markerSize = 6;
 % --- parameters to calculate ---
 opt.centralVal = false;
 opt.AUC = true;
+
+opt.xlimTS = [0 380];
+opt.ylimTS = [-7 7];
+
+opt.ylimAuc = [-1 3];
+opt.ylimCen = [-0.05 0.2].*100;
 
 %% Check for extra inputs in case changing the default options
 if exist('varargin', 'var')
