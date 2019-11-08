@@ -29,6 +29,7 @@ dirPth.saveDirFig            = fullfile(dirPth.functionalPath,'figures');
 
 %% ----- save manuscript figures (general not subject specific) -----
 dirPth.saveDirMSFig          = fullfile(SF_rootPath,'data','MS','figures');
+dirPth.saveDirStatsRes       = fullfile(SF_rootPath,'data','MS','stats_results');
 
 %% ----- save results -----
 dirPth.saveDirRes            =  fullfile(SF_rootPath, 'data','functionals',subjID,'results');

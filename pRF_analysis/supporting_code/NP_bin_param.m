@@ -9,7 +9,7 @@ if ~exist('w','var') || isempty(w)
 end
 
 x_Thr_low = xfit(1);
-x_Thr = xfit(2);
+x_Thr = xfit(end);
 
 %% Binning can be done either with equal intervals or with equal number of items in each bin (~ 20 bins)
 % Divide the data into bins with required bin size and calculate the
@@ -21,7 +21,6 @@ w_bin = struct();
 switch opt.binType
     %----- Binning with equal intervals -----%
     case {'Eq_interval'}
-        fprintf('binning with %s',opt.binType);
         
         binsize = 0.5;
         x_ecc = (x_Thr_low:binsize:x_Thr)';
@@ -90,14 +89,13 @@ switch opt.binType
 end
 %%
 
-boottype='bin';
 % Bootstrap the data  and calculate the error margins
-if strcmp(boottype,'bin')
+if strcmp(opt.bootType,'bin')
     x_data = x_bin;
     y_data = y_bin;
     w_data = w_bin;
     B = bootstrp(1000,@(x) localfit(x,x_data,y_data,w_data),(1:numel(x_data)));
-elseif strcmp(boottype,'all')
+elseif strcmp(opt.bootType,'all')
     B = bootstrp(1000,@(x) localfit(x,x_param,y_param,w),(1:numel(x_param)));
 end
 

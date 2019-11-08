@@ -36,15 +36,19 @@ opt.eccThr = [0.5 4];
 opt.meanMapThr = 1000;
 
 % --- fitting parameters ---
-opt.binType = 'Eq_size'; % Eq_size : bins contain equal number of points (unequal intervals however).
+opt.binType = 'Eq_interval'; % Eq_size : bins contain equal number of points (unequal intervals however).
                          % Eq_interval : bins with equal intervals (some bins might not contain any points however).
-opt.bootType='bin'; % bin : bin the data, bootstrap the bins (this will avoid the problems due to upsampling of functionals to anatomical space)
+opt.bootType='all'; % bin : bin the data, bootstrap the bins (this will avoid the problems due to upsampling of functionals to anatomical space)
                     % all : bootstrap all the points 
                     
 % --- plotting options ---
 opt.markerSize = 6;
 
 % --- parameters to calculate ---
+opt.cenDifference = false;
+opt.aucDifference = false;
+opt.aucBootstrap  = false;
+opt.cenEcc = 2.5;
 opt.centralVal = false;
 opt.AUC = true;
 

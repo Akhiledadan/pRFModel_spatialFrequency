@@ -14,7 +14,7 @@ if opt.getTimeSeries
     for cond_idx = 1:numCond
         cur_cond = opt.conditions{cond_idx};
         hView = viewSet(hView,'curdt',cur_cond);
-        dirPth.model_path_ind = fullfile(dirPth.modelPth,cur_cond);
+        dirPth.model_path_ind = fullfile(dirPth.modelPath,cur_cond);
         model_fname =  dir(fullfile(dirPth.model_path_ind,'*_refined_*-fFit.mat'));
         hView = rmSelect(hView,1,fullfile(model_fname.folder,model_fname.name));
         

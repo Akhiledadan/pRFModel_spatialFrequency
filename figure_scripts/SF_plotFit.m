@@ -61,7 +61,7 @@ end
 
 
 if opt.saveFig
-    saveDir = fullfile(dirPth.saveDirMSFig,'figure2');
+    saveDir = fullfile(dirPth.saveDirFig,'figure2');
     if ~exist(saveDir,'dir')
         mkdir(saveDir);
     end
@@ -146,7 +146,7 @@ if opt.saveFig
     
     figName(regexp(figName,' ')) = '_';
     filename = figName;
-    print(fH3, fullfile(saveDir,strcat(filename,'_raw_rois')), '-dpng');
+    print(fH3, fullfile(saveDir,strcat(filename,'_fit_rois')), '-dpng');
     
     %     figName(regexp(figName,' ')) = '_';
     %     filename = figName;

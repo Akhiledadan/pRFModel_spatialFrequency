@@ -6,9 +6,9 @@ conditions = opt.conditions;
 numCond = length(conditions);
 
 % change colors here
-color_map = [1 0.5 0.5;...
-    0.5 1 0.5;...
-    0.5 0.5 1;...
+color_map = [1 0 0;...
+    0 1 0;...
+    0 0 1;...
     0.5 0.5 0.5];
 
 rois = opt.rois;
@@ -17,7 +17,7 @@ numRoi = length(rois);
 
 % Plot the fit line
 figName = sprintf('%s %s vs eccentricity roi',opt.subjID,opt.yAxis);
-fH2 = figure(2); 
+fH2 = figure(2); clf; 
 set(gcf, 'Color', 'w', 'Position',[66,1,1855,1001], 'Name', figName);
 
 % Plot the variance explained
@@ -40,7 +40,7 @@ for cond_idx = 1:numCond
         
         figure(2); hold on;
         errorbar(params_comp.bin.binVal_comp{cond_idx,roi_idx}.x,params_comp.bin.binVal_comp{cond_idx,roi_idx}.y,params_comp.bin.binVal_comp{cond_idx,roi_idx}.ysterr,'.','color',color_map(roi_idx,:),...
-                          'LineStyle','none','MarkerSize',20,'HandleVisibility','off','LineWidth',3,'CapSize',10);
+                          'LineStyle','-','MarkerSize',20,'HandleVisibility','on','LineWidth',2,'CapSize',10);
         xlabel('eccentricity (deg)'); ylabel('pRF size (deg)');
         ylim([0 2]);
         xlim(opt.xaxislim);
@@ -86,9 +86,9 @@ conditions = opt.conditions;
 numCond = length(conditions);
 
 % change colors here
-color_map = [1 0.5 0.5;...
-    0.5 1 0.5;...
-    0.5 0.5 1;...
+color_map = [1 0 0;...
+    0 1 0;...
+    0 0 1;...
     0.5 0.5 0.5];
 
 rois = opt.rois;
@@ -97,7 +97,7 @@ numRoi = length(rois);
 
 % Plot the fit line
 figName = sprintf('%s %s vs eccentricity roi',opt.subjID,opt.yAxis);
-fH3 = figure(3); 
+fH3 = figure(3); clf; 
 set(gcf, 'Color', 'w', 'Position',[66,1,1855,1001], 'Name', figName);
 
 % Plot the variance explained
@@ -121,7 +121,7 @@ for roi_idx = 1:numRoi
         
         figure(3); hold on;
         errorbar(params_comp.bin.binVal_comp{cond_idx,roi_idx}.x,params_comp.bin.binVal_comp{cond_idx,roi_idx}.y,params_comp.bin.binVal_comp{cond_idx,roi_idx}.ysterr,'.','color',color_map(cond_idx,:),...
-            'LineStyle','none','MarkerSize',20,'HandleVisibility','off','LineWidth',3,'CapSize',10);
+                          'LineStyle','-','MarkerSize',20,'HandleVisibility','on','LineWidth',2,'CapSize',10);
         xlabel('eccentricity (deg)'); ylabel('pRF size (deg)');
         ylim([0 2]);
         xlim(opt.xaxislim);
@@ -141,14 +141,14 @@ for roi_idx = 1:numRoi
 end
 
 if opt.saveFig
-    saveDir = fullfile(dirPth.saveDirMSFig,'figure2');
+    saveDir = fullfile(dirPth.saveDirMSFig,'figure3');
     if ~exist(saveDir,'dir')
         mkdir(saveDir);
     end
     
     figName(regexp(figName,' ')) = '_';
     filename = figName;
-    print(fH3, fullfile(saveDir,strcat(filename,'_raw_rois')), '-dpng');
+    print(fH3, fullfile(saveDir,strcat(filename,'_bin_rois')), '-dpng');
     
     %     figName(regexp(figName,' ')) = '_';
     %     filename = figName;

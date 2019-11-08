@@ -59,7 +59,7 @@ end
 
 
 if opt.saveFig
-    saveDir = fullfile(dirPth.saveDirMSFig,'figure2');
+    saveDir = fullfile(dirPth.saveDirFig,'figure2');
     if ~exist(saveDir,'dir')
         mkdir(saveDir);
     end
@@ -132,7 +132,7 @@ for roi_idx = 1:numRoi
 end
 
 if opt.saveFig
-    saveDir = fullfile(dirPth.saveDirMSFig,'figure2');
+    saveDir = fullfile(dirPth.saveDirFig,'figure2');
     if ~exist(saveDir,'dir')
         mkdir(saveDir);
     end
@@ -215,7 +215,7 @@ for roi_idx = 1:numRoi
 end
 
 if opt.saveFig
-    saveDir = fullfile(dirPth.saveDirMSFig,'figure2');
+    saveDir = fullfile(dirPth.saveDirFig,'figure2');
     if ~exist(saveDir,'dir')
         mkdir(saveDir);
     end
