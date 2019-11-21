@@ -34,6 +34,7 @@ switch opt.binType
                 % store
                 ii2 = find(x_ecc==b);
                 data.y(ii2) = s.mean;
+                data.ystdev(ii2) = s.stdev;
                 data.ysterr(ii2) = s.sterr;
                 data.x(ii2) = x_ecc(ii2);
                 
@@ -72,6 +73,7 @@ switch opt.binType
                 s = wstat(y_param(bii),w(bii));
                 % store
                 data.y(idx_bin) = s.mean;
+                data.ystdev(idx_bin) = s.stdev;
                 data.ysterr(idx_bin) = s.sterr;
                 data.x(idx_bin) = mean(x_bin(idx_bin).data(:));
             else

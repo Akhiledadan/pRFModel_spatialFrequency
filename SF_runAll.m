@@ -1,101 +1,85 @@
-subjects = {'dlsub003',...
-            'dlsub099',...
-            'dlsub120',...
-            'dlsub123',...
-            'dlsub126',...
-            'dlsub127',...
-            'dlsub134',...
-            };
-  
-        
-% subject dlsub128 not run (DV is rerunning vistasession)        
-        
+% add the necessary matlab scripts to the path
+% addpath(genpath('/data1/projects/dumoulinlab/Lab_members/Akhil/SF/code/pRFModel_spatialFrequency')); % spatial frequency scripts
+% addpath(genpath('/data1/projects/dumoulinlab/Lab_members/Akhil/SF/code/external/vistasoft')); % vistasoft -  https://github.com/vistalab/vistasoft
+
+%%
+bb = 0; % flag for using broadband data for comparison 
+all = 1;
+
+if ~bb
+    if all
+        % subject names
+        subjects = {'dlsub003','dlsub099','dlsub120','dlsub123','dlsub126','dlsub127','dlsub128','dlsub133','dlsub134','dlsub135'};
+    else
+        % for comparison with broadband (4 overlapping subjects)
+        subjects = {'dlsub003','dlsub123','dlsub127','dlsub128'};
+    end
+    
+else
+    % for comparison with broadband (4 overlapping subjects)
+    subjects = {'dlsub003','dlsub123','dlsub127','dlsub128'};
+end
+
 % for testing       
-% subjects = {'dlsub134'};   
+%subjects = {'dlsub003'};   
 
-%subjects = {'dlsub128'};        
-params_comp_all = SF_prfPropertiesCompare(subjects);
+%%
+% load prf model files, and extract the reuiqred parameters (fit, bin, auc,
+% central values) from every subject
+params_comp_all = SF_prfPropertiesCompare(subjects,bb);
 
-% Average the binned values across subjects
-numSub  = size(params_comp_all.bin,2);
-numCond = size(params_comp_all.bin{1}.binVal_comp,1);
-numRoi  = size(params_comp_all.bin{1}.binVal_comp,2);
-for sub_idx = 1:numSub
-    for cond_idx = 1:numCond
-        for roi_idx = 1:numRoi
-            bin_x(:,cond_idx,roi_idx,sub_idx) = params_comp_all.bin{sub_idx}.binVal_comp{cond_idx,roi_idx}.x;
-            bin_y(:,cond_idx,roi_idx,sub_idx) = params_comp_all.bin{sub_idx}.binVal_comp{cond_idx,roi_idx}.y;
-            bin_ysterr(:,cond_idx,roi_idx,sub_idx) = params_comp_all.bin{sub_idx}.binVal_comp{cond_idx,roi_idx}.ysterr;
-        end
-    end
-end
 
-% plot all the subject binned values
-% change colors here
-color_map = [1 0.5 0.5;...
-    0.5 1 0.5;...
-    0.5 0.5 1;...
-    0.5 0.5 0.5];
-
-fH200= figure(200); set(gcf,'position',[66,1,1855,1001])
-
-for sub_idx = 1:numSub
-    for cond_idx = 1:numCond
-        
-         
-        for roi_idx = 1:numRoi
-            ax = subplot(1,numRoi,roi_idx);
-            
-            errorbar(bin_x(:,cond_idx,roi_idx,sub_idx),bin_y(:,cond_idx,roi_idx,sub_idx),bin_ysterr(:,cond_idx,roi_idx,sub_idx),'.','color',color_map(cond_idx,:),...
-                'LineStyle','-','MarkerSize',20,'HandleVisibility','on','LineWidth',2,'CapSize',10);
-            xlabel('eccentricity (deg)'); ylabel('pRF size (deg)');
-            ylim([0 3]);
-            xlim([0 5]);
-            legend({'3';'6';'12'},'location','NorthWest');
-            hold on;
-            set(ax, 'FontUnits','centimeters','FontSize',1.1, 'TickDir','out','LineWidth',3); box off            
-        end
-
-    end
-end
-
-% Average across subjects of the mean at each bin 
-
-bin_y_aveSub = mean(bin_y,4);
-bin_y_stdSub = std(bin_y,[],4);
-bin_y_sterrSub = bin_y_stdSub ./ sqrt(numSub);
-
-fH300= figure(300); set(gcf,'position',[66,1,1855,1001])
-for cond_idx = 1:numCond
-    for roi_idx = 1:numRoi
-        ax = subplot(1,numRoi,roi_idx);
-        
-        errorbar(bin_x(:,cond_idx,roi_idx,1),bin_y_aveSub(:,cond_idx,roi_idx),bin_y_sterrSub(:,cond_idx,roi_idx),'.','color',color_map(cond_idx,:),...
-            'LineStyle','-','MarkerSize',20,'HandleVisibility','on','LineWidth',2,'CapSize',10);
-        xlabel('eccentricity (deg)'); ylabel('pRF size (deg)');
-        ylim([0 3]);
-        xlim([0 5]);
-        legend({'3';'6';'12'},'location','NorthWest');
-        hold on;
-        set(ax, 'FontUnits','centimeters','FontSize',1.1, 'TickDir','out','LineWidth',3); box off
-    end
-end
-
+%%
+% plot average responses across subjects - AUC and central values and
+% binned mean values
 opt.verbose =1;
 if opt.verbose
-    % plot average responses across subjects - AUC and central values 
+    
     opt.saveFig = 1;
-    dirPth.saveDirMSFig = fullfile(SF_rootPath,'data','MS','figures');
+    if ~bb
+        dirPth.saveDirMSFig = fullfile(SF_rootPath,'data','MS','figures');
+    else
+        dirPth.saveDirMSFig = fullfile(SF_rootPath,'data','MS','figures_bb');
+    end
+    
+    
+    opt.bin_wMean = 1;
+    % Average the binned values across subjects
+    SF_averagePlots_bin(params_comp_all,opt,dirPth);
+    
+    % Average the auc and central values across subjects
     SF_averagePlots(params_comp_all,opt,dirPth);
 end
 
 
-%% Stats -  repeated measures ANOVA
-% parameters
-paramsToCompare      = 'auc';
-paramsToCompare_type = 'absolute';
-rois = 'V123';
-        
-fprintf('parameter: %s \t type: %s \t rois: %s',paramsToCompare,paramsToCompare_type,rois);
+%%
+bb = 1;
+opt.verbose =1;
+if opt.verbose
+    
+    opt.saveFig = 1;
+    if ~bb
+        dirPth.saveDirMSFig = fullfile(SF_rootPath,'data','MS','figures');
+    else
+        dirPth.saveDirMSFig = fullfile(SF_rootPath,'data','MS','figures_bb');
+    end
+    
+    % Average the auc and central values across subjects
+    SF_averagePlots_bb(params_comp_all,opt,dirPth);
+end
 
-SF_stats(paramsToCompare,paramsToCompare_type,rois); 
+
+
+%% Stats
+
+opt.roisToCompare = 'V123';
+opt.paramToCompare = 'auc';
+
+fprintf('parameter: %s \t rois: %s',opt.paramToCompare,opt.roisToCompare);
+
+stats_folder = '/home/edadan/SF/data/MS/stats_results';
+SF_oneWayAnova(opt,stats_folder,0);
+
+
+
+%SF_stats(paramsToCompare,paramsToCompare_type,rois); 

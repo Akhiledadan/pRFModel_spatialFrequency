@@ -52,11 +52,11 @@ opt.cenEcc = 2.5;
 opt.centralVal = false;
 opt.AUC = true;
 
-opt.xlimTS = [0 380];
-opt.ylimTS = [-7 7];
+opt.xLimTs = [0 380];
+opt.yLimTs = [-7 7];
 
-opt.ylimAuc = [-1 3];
-opt.ylimCen = [-0.05 0.2].*100;
+opt.yLimAuc = [-1 3];
+opt.yLimCen = [-0.05 0.2].*100;
 
 %% Check for extra inputs in case changing the default options
 if exist('varargin', 'var')

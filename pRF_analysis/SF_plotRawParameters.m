@@ -98,7 +98,7 @@ fH31 = figure(31); clf;
 set(gcf, 'Color', 'w', 'Position',[66,1,1855,1001], 'Name', figName);
 
 numRows = 1;
-numCols = numCond;
+numCols = numRoi;
 
 for roi_idx = 1:numRoi
     curRoi = opt.rois{roi_idx};

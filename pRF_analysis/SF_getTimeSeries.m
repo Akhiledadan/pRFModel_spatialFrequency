@@ -22,7 +22,7 @@ if opt.getTimeSeries
         
         for roi_idx =1:numRoi
             cur_roi = opt.rois{roi_idx};
-            load(fullfile(dirPth.roiPth,[cur_roi '.mat']));
+            load(fullfile(dirPth.roiPath,[cur_roi '.mat']));
             
             ts_fileName = sprintf('TS_%s_%s',cur_cond,cur_roi);
             ts_fullFileName = fullfile(dirPth.model_path_ind,ts_fileName);
@@ -64,7 +64,7 @@ else
     numRoi  = length(opt.rois);
     for cond_idx = 1:numCond
         cur_cond = opt.conditions{cond_idx};
-        dirPth.model_path_ind = fullfile(dirPth.modelPth,cur_cond);
+        dirPth.model_path_ind = fullfile(dirPth.modelPath,cur_cond);
         for roi_idx = 1:numRoi
             cur_roi = opt.rois{roi_idx};
             ts_fileName = sprintf('TS_%s_%s',cur_cond,cur_roi);

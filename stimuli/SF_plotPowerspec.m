@@ -28,9 +28,11 @@ x0 = linspace(0,display.screensizeinpixels/(2*display.screensizeindeg)/2,display
 figName = sprintf('Power spectrum distribution');
 fH1 = figure(1); 
 set(gcf,'Position',[66,1,1855,1001],'name',figName);
+
 for sf_idx = 1: numCond
     
     load(ff(sf_idx).sf);
+    
     
     %% Peak should be at the stimulus frequency
     

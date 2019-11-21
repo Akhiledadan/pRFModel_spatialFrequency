@@ -1,7 +1,13 @@
-function SF_averagePlots(params_comp_all,opt,dirPth)
+function SF_averagePlots_bb(params_comp_all,opt,dirPth)
 
 % subject average - central value
 % subject average - AUC
+% combine cen_auc.mat from bb with SF (1x3x4 + 3x3x4) -> create figures
+% with 4 conditions (SF3, 6, 12 and bb) (4x3x4)
+% loaded cen_auc.mat for SF and BB and renamed them;
+% params_comp_all.cen = [params_comp_SF.cen;params_comp_bb.cen]
+% params_comp_all.auc = [params_comp_SF.auc;params_comp_bb.auc]
+% params_comp_all.bin = [params_comp_SF.bin;params_comp_bb.bin]
 
 color_map = [1 0.75 0.75;...
     0.75 1 0.75;...
@@ -9,8 +15,9 @@ color_map = [1 0.75 0.75;...
     0.75 0.75 0.75];
 
 
-numSub = size(params_comp_all.cen,3);
-numCond = size(params_comp_all.cen,1);
+
+numSub = size(params_comp_all.cen,3)
+numCond = size(params_comp_all.cen,1)
 
 central_average = mean(params_comp_all.cen,3);
 central_std = std(params_comp_all.cen,[],3);
@@ -33,6 +40,7 @@ set(gca,'XTickLabel',{'V1';'V2';'V3'});
 set(gca,'FontSize',15,'TickDir','out','LineWidth',3); box off;
 
 % Area under curve
+
 auc_average = mean(params_comp_all.auc,3);
 auc_std = std(params_comp_all.auc,[],3);
 auc_sterr = auc_std ./ sqrt(numSub);
