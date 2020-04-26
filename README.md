@@ -19,4 +19,4 @@ Run the command -
 
 ret
 
-This will open gui. There are different parameters that can be changed. For now, you can press OK
+This will open GUI. There are different parameters that can be changed. For now, you can press OK
